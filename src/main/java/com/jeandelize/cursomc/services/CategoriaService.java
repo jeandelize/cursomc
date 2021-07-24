@@ -29,4 +29,10 @@ public class CategoriaService {
 	
 		
 	}
+	
+	
+	public Categoria insert(Categoria obj) {
+		return repo.save(obj);
+	}
+	
 }
