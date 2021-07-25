@@ -24,7 +24,7 @@ public class CategoriaResource {
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Optional<Categoria> obj = serviceCategoria.buscar(id);
+		Optional<Categoria> obj = serviceCategoria.find(id);
 		return ResponseEntity.ok().body(obj);
 		
 	}
@@ -39,5 +39,17 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 		
 	}
+	
+	
+	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
+	public ResponseEntity<Void> insert(@RequestBody Categoria obj, @PathVariable Integer id) {
+		obj.setId(id);
+		obj = serviceCategoria.insert(obj);
+		
+		return ResponseEntity.noContent().build();
+	}
+	
+	
+	
 
 }
