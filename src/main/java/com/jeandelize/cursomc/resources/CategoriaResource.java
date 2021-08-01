@@ -50,6 +50,11 @@ public class CategoriaResource {
 	}
 	
 	
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		serviceCategoria.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 	
 
 }
