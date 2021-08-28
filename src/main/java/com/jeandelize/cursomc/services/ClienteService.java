@@ -1,12 +1,20 @@
 package com.jeandelize.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.jeandelize.cursomc.domain.Cliente;
+import com.jeandelize.cursomc.domain.Cliente;
+import com.jeandelize.cursomc.dto.ClienteDTO;
 import com.jeandelize.cursomc.repositories.ClienteRepository;
+import com.jeandelize.cursomc.services.exceptions.DataIntegrityException;
 import com.jeandelize.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -15,19 +23,68 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
-	public Optional<Cliente> find(Integer id) {
-		
-		Optional<Cliente> obj = repo.findById(id);	
+	public Cliente find(Integer id) {
 		
 		
-       if ( obj.isEmpty()) {
-			throw new ObjectNotFoundException("Objeto não encontrado Id: " + id + 
-					" Id, Tipo: " + Cliente.class.getName());
-		}
-	
-		return obj;
+		Optional<Cliente> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	
 		
 	}
+	
+	
+
+	public Cliente insert(Cliente obj) {
+		return repo.save(obj);
+	}
+	
+	
+	public Cliente update(Cliente obj) {
+		Cliente newObj = find(obj.getId());
+		updateDate(newObj, obj);
+		return repo.save(newObj);
+	}
+	
+	
+
+	public void delete(Integer id) {
+		find(id);
+		try {
+		repo.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possivel excluir uma Cliente que possui Produtos");
+		}
+	}
+	
+	public List<Cliente> findAll() {
+		return repo.findAll();
+	}
+	
+	
+	public Page <Cliente> findPage(int page, int linesPerPage, String orderBy, String direction) {
+		     PageRequest pageRequest = PageRequest.of(
+             page,
+             linesPerPage,
+             Sort.Direction.ASC,
+             orderBy);
+		     
+		     return repo.findAll(pageRequest);
+	}
+	
+	
+	public Cliente fromDTO(ClienteDTO objDto) {
+		return new Cliente(objDto.getId(),objDto.getNome(),objDto.getEmail(),null,null);
+	}
+	
+	
+	private void updateDate(Cliente newObj, Cliente obj) {
+		
+	    newObj.setNome(obj.getNome());
+		newObj.setEmail(obj.getEmail());
+	}
+
+	
+	
 
 }
