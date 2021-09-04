@@ -1,6 +1,7 @@
 package com.jeandelize.cursomc.domain;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class Endereco implements Serializable {
 	}
 
 	public Endereco(Integer id, String logradouro, String numero, String complemento, String bairro, String cep,
-			Cliente cliente, Cidade cidade) {
+			Cliente cliente, Cidade c1) {
 		super();
 		this.id = id;
 		this.logradouro = logradouro;
@@ -49,7 +50,7 @@ public class Endereco implements Serializable {
 		this.bairro = bairro;
 		this.cep = cep;
 		this.cliente = cliente;
-		this.cidade = cidade;
+		this.cidade = c1;
 	}
 
 	public Integer getId() {
