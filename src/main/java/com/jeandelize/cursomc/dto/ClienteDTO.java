@@ -7,7 +7,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.jeandelize.cursomc.domain.Cliente;
+import com.jeandelize.cursomc.services.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDTO  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
