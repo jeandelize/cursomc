@@ -36,7 +36,7 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
         
 		List<FieldMessage> list = new ArrayList<>();
 		// inclua os testes aqui, inserindo erros na lista
-		
+			
 		
 		Cliente aux = clienteRepository.findByEmail(objDto.getEmail());
 		
