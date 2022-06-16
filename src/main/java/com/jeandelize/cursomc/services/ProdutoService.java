@@ -14,44 +14,35 @@ import com.jeandelize.cursomc.domain.Produto;
 import com.jeandelize.cursomc.repositories.CategoriaRepository;
 import com.jeandelize.cursomc.repositories.ProdutoRepository;
 import com.jeandelize.cursomc.services.exceptions.ObjectNotFoundException;
-
 @Service
 public class ProdutoService {
-	
+
 	@Autowired
 	private ProdutoRepository repo;
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-	public Optional<Produto> find(Integer id) {
-		
-		Optional<Produto> obj = repo.findById(id);	
-		
-		
-       if ( obj.isEmpty()) {
-			throw new ObjectNotFoundException("Objeto não encontrado Id: " + id + 
-					" Id, Tipo: " + Produto.class.getName());
+	public Produto find(Integer id) {
+		Produto obj = repo.findOne(id);
+		if (obj == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id
+					+ ", Tipo: " + Produto.class.getName());
 		}
-	
 		return obj;
-	
-		
-		
-		
 	}
-	
-	
+
+
 	public Page<Produto> search(String nome, List<Integer> ids, int page, int linesPerPage, String orderBy, String direction) {
-		
+
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.ASC, orderBy);
 		List<Categoria> categorias = categoriaRepository.findAll(ids);
-		return repo.search(nome, categorias,pageRequest);
-		
-		
+		return repo.findDistinctByNomeContainingAndCategoriasIn(nome, categorias, pageRequest);	
+
+
 	}
 
 
 
-	
+
 }
